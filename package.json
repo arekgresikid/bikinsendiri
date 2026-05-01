@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build && opennextjs-cloudflare build --skipNextBuild && node -e \"const fs = require('fs'); const path = require('path'); const out = '.open-next'; const assets = path.join(out, 'assets'); if (fs.existsSync(path.join(out, 'worker.js'))) fs.renameSync(path.join(out, 'worker.js'), path.join(out, '_worker.js')); if (fs.existsSync(assets)) { fs.readdirSync(assets).forEach(f => { const src = path.join(assets, f); const dest = path.join(out, f); if (fs.existsSync(dest)) { if (fs.statSync(dest).isDirectory()) { /* skip existing dirs like _next if they somehow exist, though they shouldn't */ } else { fs.unlinkSync(dest); } } fs.renameSync(src, dest); }); fs.rmdirSync(assets); }\"",
+		"build": "next build && opennextjs-cloudflare build --skipNextBuild && node -e \"const fs = require('fs'); const path = require('path'); const out = '.open-next'; const workerSrc = path.join(out, 'worker.js'); const assetsDir = path.join(out, 'assets'); const workerDest = path.join(assetsDir, '_worker.js'); if (fs.existsSync(workerSrc)) { if (!fs.existsSync(assetsDir)) fs.mkdirSync(assetsDir); fs.renameSync(workerSrc, workerDest); }\"",
 		"start": "next start",
 		"lint": "next lint"
 	},

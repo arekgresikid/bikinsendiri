@@ -4,9 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build",
-		"build:cf": "opennextjs-cloudflare build",
-		"deploy": "echo 'Deployment ready'",
+		"build": "next build && opennextjs-cloudflare build --skipNextBuild",
 		"start": "next start",
 		"lint": "next lint"
 	},
@@ -29,6 +27,5 @@
 		"tailwindcss": "4.1.17",
 		"typescript": "5.9.3",
 		"wrangler": "4.56.0"
-	},
-	"deployment": "2026-05-01-force-rebuild"
+	}
 }

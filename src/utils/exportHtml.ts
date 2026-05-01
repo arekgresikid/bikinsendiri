@@ -92,7 +92,7 @@ export function generateStaticHtml(data: SiteData) {
           <div class="max-w-3xl mx-auto">
             <h2 class="text-4xl font-black text-center mb-12">Pertanyaan Umum</h2>
             <div class="space-y-4">
-              ${data.faq.map((f, idx) => `
+              ${data.faq.map((f) => `
                 <div class="rounded-3xl border ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100'} p-6">
                   <div class="font-bold text-sm mb-2">${f.question}</div>
                   <div class="text-xs ${isDark ? 'text-white/60' : 'text-slate-500'}">${f.answer}</div>

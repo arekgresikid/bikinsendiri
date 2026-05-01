@@ -5,7 +5,6 @@
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build && opennextjs-cloudflare build --skipNextBuild",
-		"deploy:pages": "npm run build",
 		"start": "next start",
 		"lint": "next lint"
 	},
@@ -24,9 +23,9 @@
 		"@types/react": "19.2.7",
 		"@types/react-dom": "19.2.3",
 		"eslint": "9.39.2",
-		"eslint-config-next": "16.0.7",
+		"eslint-config-next": "15.1.0",
 		"tailwindcss": "4.1.17",
 		"typescript": "5.9.3",
-		"wrangler": "4.56.0"
+		"wrangler": "4.54.0"
 	}
 }

@@ -134,13 +134,13 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
           onToggle={() => toggleSection("sections")}
         >
           <div className="space-y-4">
-            {data.sections.map((section, idx) => (
+            {data.sections.map((section, index) => (
               <div key={section.id} className={`flex flex-col p-5 rounded-[32px] border-2 transition-all ${section.enabled ? 'bg-white border-slate-100 shadow-sm' : 'bg-slate-50 border-transparent opacity-40'}`}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col gap-1">
-                      <button onClick={() => moveSection(idx, 'up')} className="text-slate-300 hover:text-blue-500 disabled:opacity-0" disabled={idx === 0}><ChevronUp className="w-4 h-4" /></button>
-                      <button onClick={() => moveSection(idx, 'down')} className="text-slate-300 hover:text-blue-500 disabled:opacity-0" disabled={idx === data.sections.length - 1}><ChevronDown className="w-4 h-4" /></button>
+                      <button onClick={() => moveSection(index, 'up')} className="text-slate-300 hover:text-blue-500 disabled:opacity-0" disabled={index === 0}><ChevronUp className="w-4 h-4" /></button>
+                      <button onClick={() => moveSection(index, 'down')} className="text-slate-300 hover:text-blue-500 disabled:opacity-0" disabled={index === data.sections.length - 1}><ChevronDown className="w-4 h-4" /></button>
                     </div>
                     <span className="text-xs font-black uppercase tracking-widest text-slate-800">{section.type}</span>
                   </div>

@@ -289,7 +289,7 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
                        <div className="flex gap-1 mb-8">
                           {[...Array(t.rating)].map((_, si) => <StarIcon key={si} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
                        </div>
-                       <p className="text-xl font-medium text-slate-700 italic leading-relaxed mb-10">"{t.content}"</p>
+                       <p className="text-xl font-medium text-slate-700 italic leading-relaxed mb-10">&quot;{t.content}&quot;</p>
                        <div className="flex items-center gap-5">
                           <img src={t.avatar} alt={t.name} className="w-14 h-14 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                           <div>

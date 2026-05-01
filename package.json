@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build && opennextjs-cloudflare build --skipNextBuild",
+		"deploy:pages": "npm run build",
 		"start": "next start",
 		"lint": "next lint"
 	},

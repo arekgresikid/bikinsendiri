@@ -1,88 +1,99 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import { defaultSiteData, SiteData } from "@/types/site";
+import EditorPanel from "@/components/builder/EditorPanel";
+import PreviewCanvas from "@/components/builder/PreviewCanvas";
+import { Rocket, Sparkles, Download } from "lucide-react";
+import { generateStaticHtml } from "@/utils/exportHtml";
 
 export default function Home() {
-	return (
-		<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-				<Image
-					className="dark:invert"
-					src="/next.svg"
-					alt="Next.js logo"
-					width={180}
-					height={38}
-					priority
-				/>
-				<ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-					<li className="mb-2 tracking-[-.01em]">
-						Get started by editing{" "}
-						<code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-							src/app/page.tsx
-						</code>
-						.
-					</li>
-					<li className="tracking-[-.01em]">
-						Save and see your changes instantly.
-					</li>
-				</ol>
+  const [siteData, setSiteData] = useState<SiteData>(defaultSiteData);
+  const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
 
-				<div className="flex gap-4 items-center flex-col sm:flex-row">
-					<a
-						className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-						href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Read our docs
-					</a>
-				</div>
-			</main>
-			<footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image
-						aria-hidden
-						src="/file.svg"
-						alt="File icon"
-						width={16}
-						height={16}
-					/>
-					Learn
-				</a>
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image
-						aria-hidden
-						src="/window.svg"
-						alt="Window icon"
-						width={16}
-						height={16}
-					/>
-					Examples
-				</a>
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image
-						aria-hidden
-						src="/globe.svg"
-						alt="Globe icon"
-						width={16}
-						height={16}
-					/>
-					Go to nextjs.org →
-				</a>
-			</footer>
-		</div>
-	);
+  const handleDataChange = (newData: Partial<SiteData>) => {
+    setSiteData((prev) => ({ ...prev, ...newData }));
+  };
+
+  const handleReset = () => {
+    if (confirm("Apakah Anda yakin ingin meriset semua konfigurasi?")) {
+      setSiteData(defaultSiteData);
+    }
+  };
+
+  const handleExport = () => {
+    const html = generateStaticHtml(siteData);
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${siteData.siteName.toLowerCase().replace(/\s+/g, '-')}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <main className="min-h-screen flex flex-col bg-slate-100/50">
+      {/* Header Bar */}
+      <header className="h-16 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-50 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
+             <Rocket className="text-white w-5 h-5" />
+          </div>
+          <div>
+            <h1 className="font-bold text-slate-900 leading-tight">Bikin Sendiri</h1>
+            <p className="text-[10px] text-blue-600 font-bold uppercase tracking-widest">No-Code Builder</p>
+          </div>
+        </div>
+
+        {/* Device Switcher */}
+        <div className="bg-slate-100 p-1 rounded-xl flex gap-1 border border-slate-200">
+          <button 
+            onClick={() => setPreviewDevice('desktop')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${previewDevice === 'desktop' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-800'}`}
+          >
+            Desktop
+          </button>
+          <button 
+            onClick={() => setPreviewDevice('mobile')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${previewDevice === 'mobile' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-800'}`}
+          >
+            Mobile
+          </button>
+        </div>
+        
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={handleReset}
+            className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors"
+          >
+            Reset
+          </button>
+          <button 
+            onClick={handleExport}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
+          >
+            <Download className="w-4 h-4" /> Download HTML
+          </button>
+          <button className="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-bold flex items-center gap-2 hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl active:scale-95">
+             <Sparkles className="w-4 h-4" /> Publish Web
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Side: Editor */}
+        <aside className="w-[400px] border-r border-slate-200/60 bg-white shrink-0 overflow-hidden flex flex-col">
+          <EditorPanel data={siteData} onChange={handleDataChange} />
+        </aside>
+
+        {/* Right Side: Preview Canvas */}
+        <section className="flex-1 bg-slate-100 p-8 md:p-12 overflow-y-auto flex flex-col items-center custom-scrollbar">
+           <PreviewCanvas data={siteData} device={previewDevice} />
+        </section>
+      </div>
+    </main>
+  );
 }

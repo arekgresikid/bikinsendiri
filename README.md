@@ -1,63 +1,29 @@
-# Next.js Framework Starter
+# Bikin Sendiri - No-Code Web Builder
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/next-starter-template)
+Aplikasi ini memungkinkan siapa saja untuk membuat landing page profesional tanpa koding.
 
-<!-- dash-content-start -->
+## Fitur Utama
+- **Editor Visual**: Form input yang mudah digunakan untuk mengatur konten web.
+- **Preview Real-time**: Lihat perubahan Anda secara instan dalam tampilan browser simulasi.
+- **Desain Premium**: Template modern dengan estetika glassmorphism dan tipografi yang tajam.
+- **Kustomisasi Warna**: Pilih warna utama yang sesuai dengan brand Anda.
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). It's deployed on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+## Parameter yang Bisa Diatur
+- **Nama Situs**: Nama yang muncul di navigasi dan judul tab.
+- **Header**: Judul utama dan sub-judul untuk menarik perhatian pengunjung.
+- **Media**: URL gambar hero untuk bagian atas web.
+- **Konten**: Deskripsi lengkap mengenai layanan atau produk Anda.
+- **CTA (Call to Action)**: Teks tombol ajakan bertindak.
+- **Warna & Font**: Sesuaikan palet warna dan pilihan font (Outfit, Inter, Roboto).
 
-This template uses [OpenNext](https://opennext.js.org/) via the [OpenNext Cloudflare adapter](https://opennext.js.org/cloudflare), which works by taking the Next.js build output and transforming it, so that it can run in Cloudflare Workers.
+## Cara Menjalankan Secara Lokal
+1. Pastikan Anda memiliki Node.js terinstal.
+2. Jalankan `npm install` untuk menginstal dependensi.
+3. Jalankan `npm run dev` untuk memulai server pengembangan.
+4. Buka `http://localhost:3000` di browser Anda.
 
-<!-- dash-content-end -->
-
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
-
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/next-starter-template
-```
-
-A live public deployment of this template is available at [https://next-starter-template.templates.workers.dev](https://next-starter-template.templates.workers.dev)
-
-## Getting Started
-
-First, run:
-
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-# or
-bun install
-```
-
-Then run the development server (using the package manager of your choice):
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Deploying To Production
-
-| Command                           | Action                                       |
-| :-------------------------------- | :------------------------------------------- |
-| `npm run build`                   | Build your production site                   |
-| `npm run preview`                 | Preview your build locally, before deploying |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare    |
-| `npm wrangler tail`               | View real-time logs for all Workers          |
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Struktur Proyek
+- `src/types/site.ts`: Definisi data untuk konfigurasi web.
+- `src/components/builder/EditorPanel.tsx`: Komponen form editor.
+- `src/components/builder/PreviewCanvas.tsx`: Komponen perender web.
+- `src/app/page.tsx`: Dashboard utama aplikasi.

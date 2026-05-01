@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build && opennextjs-cloudflare build --skipNextBuild && node -e \"const fs = require('fs'); const path = require('path'); const out = '.open-next'; const workerSrc = path.join(out, 'worker.js'); const assetsDir = path.join(out, 'assets'); const workerDest = path.join(assetsDir, '_worker.js'); if (fs.existsSync(workerSrc)) { if (!fs.existsSync(assetsDir)) fs.mkdirSync(assetsDir); fs.renameSync(workerSrc, workerDest); }\"",
+		"build": "next build && opennextjs-cloudflare build --skipNextBuild && node -e \"const fs = require('fs'); const path = require('path'); const out = '.open-next'; const workerSrc = path.join(out, 'worker.js'); const assetsDir = path.join(out, 'assets'); const workerDest = path.join(assetsDir, '_worker.js'); if (fs.existsSync(workerSrc)) { let c = fs.readFileSync(workerSrc, 'utf8'); c = c.split('from \\\"./').join('from \\\"../').split('from \\'./').join('from \\'../').split('import(\\\"./').join('import(\\\"../').split('import(\\'./').join('import(\\'../'); if (!fs.existsSync(assetsDir)) fs.mkdirSync(assetsDir); fs.writeFileSync(workerDest, c); fs.unlinkSync(workerSrc); }\"",
 		"start": "next start",
 		"lint": "next lint"
 	},

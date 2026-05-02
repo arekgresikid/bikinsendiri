@@ -2,34 +2,9 @@
 import { useState, useEffect } from "react";
 import { SiteData } from "@/types/site";
 import { 
-  MessageSquare, 
-  Zap, 
-  DollarSign, 
-  Clock, 
-  Instagram, 
-  Facebook, 
-  Youtube, 
-  ChevronDown, 
-  Search,
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
-  BookOpen,
-  Check,
-  Plus,
-  Minus,
-  Quote,
-  Star as StarIcon,
-  Twitter,
-  Linkedin,
-  Send,
-  Smartphone,
-  Tablet,
-  Monitor,
-  Mail,
-  Bell,
-  Sparkles
+  MessageSquare, Zap, DollarSign, Clock, Instagram, Facebook, Youtube, 
+  ChevronDown, ArrowRight, Calendar, Check, Quote, Star as StarIcon,
+  Twitter, Linkedin, Send, Mail, Sparkles
 } from "lucide-react";
 
 interface PreviewCanvasProps {
@@ -133,22 +108,22 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
               <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-600/10 text-blue-600 text-[11px] font-black uppercase tracking-[0.2em] mb-10 border border-blue-600/20 shadow-xl shadow-blue-500/5">
                 <Sparkles className="w-4 h-4 fill-current" /> High-Performance Builder
               </div>
-              <h1 className={`${isMobile ? 'text-4xl' : 'text-8xl'} font-black mb-10 leading-[1] tracking-tightest ${isGlass || isDark ? 'text-white' : 'text-slate-950'}`}>
+              <h1 className={`${isMobile ? 'text-3xl' : 'text-5xl'} font-black mb-6 leading-[1.1] tracking-tight ${isGlass || isDark ? 'text-white' : 'text-slate-950'}`}>
                 {data.headerTitle}
               </h1>
-              <p className={`${isMobile ? 'text-base' : 'text-2xl'} mb-14 opacity-60 font-medium leading-relaxed max-w-3xl ${data.globalStyle.heroAlign === 'center' ? 'mx-auto' : ''} ${isGlass || isDark ? 'text-white' : 'text-slate-700'}`}>
+              <p className={`${isMobile ? 'text-sm' : 'text-lg'} mb-8 opacity-60 font-medium leading-relaxed max-w-2xl ${data.globalStyle.heroAlign === 'center' ? 'mx-auto' : ''} ${isGlass || isDark ? 'text-white' : 'text-slate-700'}`}>
                 {data.headerSub}
               </p>
               <div className={`flex flex-wrap gap-6 ${data.globalStyle.heroAlign === 'center' ? 'justify-center' : ''}`}>
                 <button 
-                  className={`px-14 py-7 font-black transition-all hover:scale-110 active:scale-95 shadow-2xl inline-flex items-center gap-4 uppercase tracking-[0.2em] text-xs group ring-4 ring-white/10`}
+                  className={`px-8 py-4 font-bold transition-all hover:scale-105 active:scale-95 shadow-lg inline-flex items-center gap-3 uppercase tracking-wider text-xs group`}
                   style={{ ...getButtonStyle(), borderRadius: currentRadius }}
                 >
                   {data.ctaText} <ArrowRight className="w-6 h-6 group-hover:translate-x-3 transition-transform" />
                 </button>
               </div>
               {data.heroImageUrl && (
-                <div className={`mt-28 overflow-hidden border-[16px] group relative transform hover:rotate-1 transition-transform duration-1000 ${isGlass ? 'border-white/5' : 'border-white'}`} style={{ borderRadius: currentRadius, boxShadow: currentShadow }}>
+                <div className={`mt-12 overflow-hidden border-4 group relative ${isGlass ? 'border-white/5' : 'border-white'}`} style={{ borderRadius: currentRadius, boxShadow: currentShadow }}>
                   <img src={data.heroImageUrl} alt="Hero" className="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-[2s]" />
                 </div>
               )}
@@ -162,7 +137,7 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
             <div style={containerStyle} className="space-y-28">
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-12">
                 <div className="space-y-6 text-center md:text-left w-full">
-                  <h2 className={`text-6xl font-black tracking-tightest ${isGlass || isDark ? 'text-white' : 'text-slate-950'}`}>Solusi <span style={{ color: data.primaryColor }}>Terbaik</span></h2>
+                  <h2 className={`text-4xl font-black tracking-tight ${isGlass || isDark ? 'text-white' : 'text-slate-950'}`}>Solusi <span style={{ color: data.primaryColor }}>Terbaik</span></h2>
                   <div className={`w-40 h-4 rounded-full ${data.globalStyle.heroAlign === 'center' ? 'mx-auto' : ''}`} style={{ backgroundColor: isGlass || isDark ? 'white' : data.accentColor }} />
                 </div>
               </div>
@@ -173,15 +148,15 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
                   return (
                     <div 
                       key={card.id} 
-                      className={`p-14 border transition-all hover:-translate-y-6 hover:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] group relative overflow-hidden flex ${layout === 'list' ? 'flex-row items-center gap-12' : 'flex-col items-start'}`}
+                      className={`p-8 border transition-all hover:-translate-y-2 hover:shadow-xl group relative overflow-hidden flex ${layout === 'list' ? 'flex-row items-center gap-6' : 'flex-col items-start'}`}
                       style={{ borderRadius: currentRadius, boxShadow: currentShadow, backgroundColor: isDark ? '#1e293b' : 'white', borderColor: isDark ? '#334155' : '#f1f5f9' }}
                     >
-                      <div className={`w-24 h-24 rounded-[36px] flex items-center justify-center mb-12 shrink-0 transition-all group-hover:scale-125 group-hover:rotate-[20deg] ${isDark ? 'bg-white/5 shadow-inner' : 'bg-slate-50 shadow-sm'}`}>
-                        <IconComponent className="w-12 h-12" style={{ color: data.primaryColor }} />
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shrink-0 transition-all group-hover:scale-110 ${isDark ? 'bg-white/5' : 'bg-slate-50'}`}>
+                        <IconComponent className="w-7 h-7" style={{ color: data.primaryColor }} />
                       </div>
                       <div className="flex-1">
-                        <h3 className={`text-3xl font-black mb-6 leading-tight ${isDark ? 'text-white' : 'text-slate-950'}`}>{card.title}</h3>
-                        <p className={`text-lg leading-relaxed opacity-60 mb-10 ${isDark ? 'text-white' : 'text-slate-500'}`}>{card.description}</p>
+                        <h3 className={`text-lg font-bold mb-3 leading-tight ${isDark ? 'text-white' : 'text-slate-950'}`}>{card.title}</h3>
+                        <p className={`text-sm leading-relaxed opacity-60 ${isDark ? 'text-white' : 'text-slate-500'}`}>{card.description}</p>
                       </div>
                     </div>
                   );
@@ -224,7 +199,7 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
           <section key="pricing" className={`${commonClass}`} style={sectionStyle}>
             <div style={containerStyle} className="space-y-20">
               <div className="text-center space-y-6">
-                <h2 className="text-6xl font-black tracking-tightest">Harga <span style={{ color: data.primaryColor }}>Transparan</span></h2>
+                <h2 className="text-4xl font-black tracking-tight">Harga <span style={{ color: data.primaryColor }}>Transparan</span></h2>
                 <p className="text-slate-500 max-w-xl mx-auto">Pilih paket yang sesuai dengan kebutuhan bisnis Anda.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -329,12 +304,11 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
   const navStyleClass = data.navbarConfig.style === 'transparent' ? 'bg-transparent' : isDark ? 'bg-slate-950/90' : 'bg-white/90';
 
   return (
-    <div 
-      className={`h-full rounded-[64px] overflow-hidden shadow-[0_100px_200px_rgba(0,0,0,0.7)] flex flex-col border border-white/5 transition-all duration-700 ease-in-out relative group/canvas ${
+    <div className={`h-full rounded-2xl overflow-hidden shadow-2xl flex flex-col border border-slate-200/50 transition-all duration-500 relative group/canvas ${
         isGlass ? 'bg-gradient-to-br from-indigo-800 via-blue-900 to-black' : 
         data.globalStyle.useAnimatedBg ? 'mesh-gradient' :
-        isDark ? 'bg-slate-950' : 'bg-slate-100'
-      } ${isMobile ? 'w-[400px] border-[14px] border-slate-900 ring-[1px] ring-white/10 rounded-[64px] h-[850px] my-auto' : 'w-full'}`}
+        isDark ? 'bg-slate-950' : 'bg-white'
+      } ${isMobile ? 'w-[375px] border-[8px] border-slate-900 rounded-[40px] h-[812px] my-auto' : 'w-full'}`}
     >
       {/* Sync Indicator */}
       {isSyncing && (
@@ -355,18 +329,18 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
         style={{ fontFamily: `var(--font-${data.fontFamily.toLowerCase()})` }}
       >
         {/* Navigation */}
-        <nav className={`px-20 py-12 flex items-center top-0 z-50 backdrop-blur-3xl transition-all border-b ${navPositionClass} ${navStyleClass} ${
+        <nav className={`px-6 py-4 flex items-center top-0 z-50 backdrop-blur-xl transition-all border-b ${navPositionClass} ${navStyleClass} ${
           isDark ? 'border-white/5' : 'border-slate-100'
-        } ${data.navbarConfig.alignment === 'center' ? 'flex-col gap-12' : 'justify-between'}`}>
-          <div className="font-black text-5xl tracking-tightest transform hover:skew-x-3 transition-transform cursor-pointer" style={{ color: isGlass || isDark ? 'white' : data.primaryColor }}>
-            {data.siteName.charAt(0)}<span className="opacity-20">{data.siteName.slice(1)}</span>
+        } ${data.navbarConfig.alignment === 'center' ? 'flex-col gap-4' : 'justify-between'}`}>
+          <div className="font-bold text-xl tracking-tight cursor-pointer" style={{ color: isGlass || isDark ? 'white' : data.primaryColor }}>
+            {data.siteName}
           </div>
           
-          <div className={`flex gap-16 text-[12px] font-black uppercase tracking-[0.5em] ${isGlass || isDark ? 'text-white/30' : 'text-slate-400'}`}>
+          <div className={`flex gap-6 text-[11px] font-semibold ${isGlass || isDark ? 'text-white/50' : 'text-slate-500'}`}>
             {data.navLinks.map((link, idx) => (
-              <div key={idx} className="relative group/nav cursor-pointer hover:text-white transition-all">
+              <div key={idx} className="relative group/nav cursor-pointer hover:text-slate-900 transition-colors">
                 {link.label}
-                <div className="absolute -bottom-4 left-0 w-0 h-1.5 bg-blue-600 transition-all group-hover/nav:w-full rounded-full shadow-[0_0_20px_#2563eb]" />
+                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover/nav:w-full rounded-full" />
               </div>
             ))}
           </div>
@@ -374,7 +348,7 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
           {!isMobile && (
              <div className="flex gap-6 items-center">
                 <button 
-                  className="px-12 py-5 rounded-full text-[11px] font-black uppercase tracking-[0.2em] transition-all shadow-[0_20px_40px_rgba(255,255,255,0.1)]"
+                  className="px-6 py-2.5 rounded-full text-[11px] font-bold transition-all"
                   style={getButtonStyle()}
                 >
                   Contact
@@ -394,9 +368,9 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
           .map(s => renderSection(s))}
 
         {/* Studio Footer */}
-        <footer className={`p-40 text-center space-y-32 transition-all ${isDark ? 'bg-black' : 'bg-slate-950 text-slate-500'}`}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-20 text-left max-w-6xl mx-auto border-b border-white/5 pb-32">
-             <div className="space-y-8">
+        <footer className={`p-12 text-center space-y-10 transition-all ${isDark ? 'bg-black' : 'bg-slate-950 text-slate-500'}`}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-left max-w-5xl mx-auto border-b border-white/5 pb-10">
+             <div className="space-y-4">
                 <h4 className="text-white font-black text-lg">Product</h4>
                 <div className="flex flex-col gap-4 text-xs font-bold uppercase tracking-widest opacity-40">
                    <span>Features</span><span>Pricing</span><span>API</span><span>Beta</span>
@@ -427,7 +401,7 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
              </div>
           </div>
           <div className="space-y-12">
-            <h3 className="font-black text-[12vw] text-white/5 tracking-tightest select-none leading-none">{data.siteName}</h3>
+            <h3 className="font-black text-4xl text-white/10 tracking-tight select-none">{data.siteName}</h3>
             <p className="text-[11px] font-black uppercase tracking-[0.8em] opacity-10">
               Handcrafted in 2026 by Bikin Sendiri Studio. No-Code Revolution.
             </p>
@@ -438,9 +412,9 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
       {/* Elite WhatsApp Button */}
       {data.showWhatsapp && (
         <div className="absolute bottom-16 right-16 z-50">
-          <div className="bg-[#25D366] text-white p-8 rounded-[40px] shadow-[0_50px_100px_rgba(37,211,102,0.6)] flex items-center justify-center cursor-pointer hover:scale-110 transition-all hover:-translate-y-6 group ring-[16px] ring-white/5 active:scale-90 overflow-hidden">
+          <div className="bg-[#25D366] text-white p-4 rounded-2xl shadow-lg flex items-center justify-center cursor-pointer hover:scale-105 transition-all group">
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <MessageSquare className="w-10 h-10 fill-white" />
+            <MessageSquare className="w-6 h-6 fill-white" />
             <div className="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-6 transition-all duration-700 flex flex-col text-left">
                <span className="font-black text-sm uppercase tracking-widest leading-none mb-1">Direct Chat</span>
                <span className="text-[10px] font-bold opacity-70 tracking-widest">Priority Support</span>

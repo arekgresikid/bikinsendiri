@@ -98,11 +98,32 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
       <div className="flex-1 overflow-y-auto custom-scrollbar">
 
         {/* === IDENTITAS SITUS === */}
-        <CollapsibleSection title="Identitas Situs" icon={<Globe className="w-4 h-4" />} isOpen={expandedSection === "identity"} onToggle={() => toggleSection("identity")}>
+        <CollapsibleSection title="Identitas Situs & SEO" icon={<Globe className="w-4 h-4" />} isOpen={expandedSection === "identity"} onToggle={() => toggleSection("identity")}>
           <div className="space-y-4">
             <Field label="Nama Situs" value={data.siteName} onChange={v => onChange({ siteName: v })} />
+            <Field label="URL Logo (Opsional)" value={data.logoUrl || ''} onChange={v => onChange({ logoUrl: v })} placeholder="https://..." />
+            <Field label="URL Favicon (Opsional)" value={data.faviconUrl || ''} onChange={v => onChange({ faviconUrl: v })} placeholder="https://..." />
             <Field label="SEO Title" value={data.seoTitle} onChange={v => onChange({ seoTitle: v })} />
             <Field label="SEO Description" value={data.seoDescription} onChange={v => onChange({ seoDescription: v })} multiline />
+            
+            {/* SEO Preview Card */}
+            <div className="mt-4 p-4 rounded-xl border border-slate-200 bg-white shadow-sm space-y-2">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden">
+                  {data.faviconUrl ? <img src={data.faviconUrl} alt="Favicon" className="w-4 h-4" /> : <Globe className="w-3 h-3 text-slate-400" />}
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-800 font-medium leading-none">{data.siteName}</div>
+                  <div className="text-[10px] text-slate-500 leading-none mt-0.5">https://namasitus.com</div>
+                </div>
+              </div>
+              <h3 className="text-sm font-medium text-blue-700 leading-tight hover:underline cursor-pointer">
+                {data.seoTitle || data.siteName}
+              </h3>
+              <p className="text-xs text-slate-600 line-clamp-2 leading-snug">
+                {data.seoDescription}
+              </p>
+            </div>
           </div>
         </CollapsibleSection>
 
@@ -113,17 +134,8 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
             <Field label="Sub Judul" value={data.headerSub} onChange={v => onChange({ headerSub: v })} multiline />
             <Field label="Teks Tombol CTA" value={data.ctaText} onChange={v => onChange({ ctaText: v })} />
             <Field label="URL Gambar Hero" value={data.heroImageUrl} onChange={v => onChange({ heroImageUrl: v })} placeholder="https://..." />
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Alignment Hero</label>
-              <div className="grid grid-cols-3 gap-1.5">
-                {(['left', 'center', 'right'] as const).map(align => (
-                  <button key={align} onClick={() => onChange({ globalStyle: { ...data.globalStyle, heroAlign: align } })}
-                    className={`py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${data.globalStyle.heroAlign === align ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'}`}>
-                    {align}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <OptionGrid label="Layout Hero" options={['centered', 'split', 'fullbg']} value={data.heroLayout} onChange={v => onChange({ heroLayout: v as any })} />
+            <OptionGrid label="Alignment Teks" options={['left', 'center', 'right']} value={data.globalStyle.heroAlign} onChange={v => onChange({ globalStyle: { ...data.globalStyle, heroAlign: v as any } })} />
           </div>
         </CollapsibleSection>
 
@@ -191,6 +203,10 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
         {/* === LAYANAN / KARTU === */}
         <CollapsibleSection title="Layanan / Kartu" icon={<Star className="w-4 h-4" />} isOpen={expandedSection === "cards"} onToggle={() => toggleSection("cards")}>
           <div className="space-y-3">
+            <OptionGrid label="Jumlah Kolom" options={['2', '3', '4']} value={String(data.sections.find(s => s.type === 'gallery')?.columns || 3)} onChange={v => {
+              const newSections = data.sections.map(s => s.type === 'gallery' ? { ...s, columns: parseInt(v) } : s);
+              onChange({ sections: newSections });
+            }} />
             {data.cards.map((card, i) => (
               <div key={card.id} className="p-3 bg-slate-50 rounded-xl space-y-2 border border-slate-100">
                 <div className="flex items-center justify-between">

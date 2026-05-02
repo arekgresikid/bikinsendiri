@@ -106,29 +106,66 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
     const commonClass = `reveal px-8 transition-all duration-1000 ${currentFontScale}`;
 
     switch (type) {
-      case 'hero':
+      case 'hero': {
+        const heroAlign = data.globalStyle.heroAlign;
+        const heroBg = isMinimal ? (isDark ? 'bg-slate-900' : 'bg-white') : isGlass ? 'bg-white/5 backdrop-blur-3xl' : isDark ? 'bg-slate-800/10' : 'bg-slate-50';
+        
+        // Split Layout
+        if (data.heroLayout === 'split' && !isMobile) {
+          return (
+            <section key="hero" className={`${commonClass} ${heroBg} relative overflow-hidden`} style={sectionStyle}>
+              <div className="flex items-center gap-12" style={containerStyle}>
+                <div className="flex-1 space-y-8">
+                  <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-600/10 text-blue-600 text-[11px] font-black uppercase tracking-[0.2em] border border-blue-600/20">
+                    <Sparkles className="w-4 h-4 fill-current" /> High-Performance Builder
+                  </div>
+                  <h1 className={`text-5xl font-black leading-[1.1] tracking-tight ${isGlass || isDark ? 'text-white' : 'text-slate-950'}`}>{data.headerTitle}</h1>
+                  <p className={`text-lg opacity-60 font-medium leading-relaxed max-w-lg ${isGlass || isDark ? 'text-white' : 'text-slate-700'}`}>{data.headerSub}</p>
+                  <button className={`${btnSize} font-bold transition-all hover:scale-105 active:scale-95 shadow-lg inline-flex items-center gap-3 uppercase tracking-wider group`} style={{ ...getButtonStyle(), borderRadius: currentRadius }}>
+                    {data.ctaText} <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                  </button>
+                </div>
+                {data.heroImageUrl && (
+                  <div className="flex-1 overflow-hidden group" style={{ borderRadius: currentRadius, boxShadow: currentShadow }}>
+                    <img src={data.heroImageUrl} alt="Hero" className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-[2s]" />
+                  </div>
+                )}
+              </div>
+            </section>
+          );
+        }
+        
+        // Full Background Layout
+        if (data.heroLayout === 'fullbg') {
+          return (
+            <section key="hero" className={`${commonClass} relative overflow-hidden min-h-[500px] flex items-center justify-center`} style={{ ...sectionStyle, backgroundImage: data.heroImageUrl ? `url(${data.heroImageUrl})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+              <div className="absolute inset-0 bg-black/60 z-0" />
+              <div className={`relative z-10 text-center max-w-3xl mx-auto px-8`}>
+                <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] mb-10 border border-white/20">
+                  <Sparkles className="w-4 h-4 fill-current" /> High-Performance Builder
+                </div>
+                <h1 className={`${isMobile ? 'text-3xl' : 'text-5xl'} font-black mb-6 leading-[1.1] tracking-tight text-white`}>{data.headerTitle}</h1>
+                <p className={`${isMobile ? 'text-sm' : 'text-lg'} mb-8 text-white/70 font-medium leading-relaxed max-w-2xl mx-auto`}>{data.headerSub}</p>
+                <button className={`${btnSize} font-bold transition-all hover:scale-105 active:scale-95 shadow-lg inline-flex items-center gap-3 uppercase tracking-wider group`} style={{ ...getButtonStyle(), borderRadius: currentRadius }}>
+                  {data.ctaText} <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                </button>
+              </div>
+            </section>
+          );
+        }
+
+        // Default Centered Layout
         return (
-          <section key="hero" className={`${commonClass} text-center relative overflow-hidden ${
-            isMinimal ? (isDark ? 'bg-slate-900' : 'bg-white') : 
-            isGlass ? 'bg-white/5 backdrop-blur-3xl' : 
-            isDark ? 'bg-slate-800/10' : 'bg-slate-50'
-          }`} style={sectionStyle}>
-            <div className={`relative z-10 ${data.globalStyle.heroAlign === 'left' ? 'text-left' : data.globalStyle.heroAlign === 'right' ? 'text-right' : 'text-center'}`} style={containerStyle}>
+          <section key="hero" className={`${commonClass} text-center relative overflow-hidden ${heroBg}`} style={sectionStyle}>
+            <div className={`relative z-10 ${heroAlign === 'left' ? 'text-left' : heroAlign === 'right' ? 'text-right' : 'text-center'}`} style={containerStyle}>
               <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-600/10 text-blue-600 text-[11px] font-black uppercase tracking-[0.2em] mb-10 border border-blue-600/20 shadow-xl shadow-blue-500/5">
                 <Sparkles className="w-4 h-4 fill-current" /> High-Performance Builder
               </div>
-              <h1 className={`${isMobile ? 'text-3xl' : 'text-5xl'} font-black mb-6 leading-[1.1] tracking-tight ${isGlass || isDark ? 'text-white' : 'text-slate-950'}`}>
-                {data.headerTitle}
-              </h1>
-              <p className={`${isMobile ? 'text-sm' : 'text-lg'} mb-8 opacity-60 font-medium leading-relaxed max-w-2xl ${data.globalStyle.heroAlign === 'center' ? 'mx-auto' : ''} ${isGlass || isDark ? 'text-white' : 'text-slate-700'}`}>
-                {data.headerSub}
-              </p>
-              <div className={`flex flex-wrap gap-6 ${data.globalStyle.heroAlign === 'center' ? 'justify-center' : ''}`}>
-                <button 
-                  className={`px-8 py-4 font-bold transition-all hover:scale-105 active:scale-95 shadow-lg inline-flex items-center gap-3 uppercase tracking-wider text-xs group`}
-                  style={{ ...getButtonStyle(), borderRadius: currentRadius }}
-                >
-                  {data.ctaText} <ArrowRight className="w-6 h-6 group-hover:translate-x-3 transition-transform" />
+              <h1 className={`${isMobile ? 'text-3xl' : 'text-5xl'} font-black mb-6 leading-[1.1] tracking-tight ${isGlass || isDark ? 'text-white' : 'text-slate-950'}`}>{data.headerTitle}</h1>
+              <p className={`${isMobile ? 'text-sm' : 'text-lg'} mb-8 opacity-60 font-medium leading-relaxed max-w-2xl ${heroAlign === 'center' ? 'mx-auto' : ''} ${isGlass || isDark ? 'text-white' : 'text-slate-700'}`}>{data.headerSub}</p>
+              <div className={`flex flex-wrap gap-6 ${heroAlign === 'center' ? 'justify-center' : ''}`}>
+                <button className={`${btnSize} font-bold transition-all hover:scale-105 active:scale-95 shadow-lg inline-flex items-center gap-3 uppercase tracking-wider group`} style={{ ...getButtonStyle(), borderRadius: currentRadius }}>
+                  {data.ctaText} <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                 </button>
               </div>
               {data.heroImageUrl && (
@@ -139,19 +176,22 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
             </div>
           </section>
         );
+      }
 
-      case 'gallery':
+      case 'gallery': {
+        const galleryCols = section.columns || 3;
+        const colsClass = galleryCols === 2 ? 'md:grid-cols-2' : galleryCols === 4 ? 'md:grid-cols-4' : 'md:grid-cols-3';
         return (
           <section key="gallery" className={`${commonClass} ${isGlass ? 'bg-white/5' : isDark ? 'bg-slate-900/80' : 'bg-white'}`} style={sectionStyle}>
             <div style={containerStyle} className="space-y-28">
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-12">
                 <div className="space-y-6 text-center md:text-left w-full">
                   <h2 className={`text-4xl font-black tracking-tight ${isGlass || isDark ? 'text-white' : 'text-slate-950'}`}>Solusi <span style={{ color: data.primaryColor }}>Terbaik</span></h2>
-                  <div className={`w-40 h-4 rounded-full ${data.globalStyle.heroAlign === 'center' ? 'mx-auto' : ''}`} style={{ backgroundColor: isGlass || isDark ? 'white' : data.accentColor }} />
+                  <div className={`w-40 h-4 rounded-full`} style={{ backgroundColor: isGlass || isDark ? 'white' : data.accentColor }} />
                 </div>
               </div>
 
-              <div className={`grid gap-12 ${layout === 'list' ? 'grid-cols-1' : isMobile ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-3'}`}>
+              <div className={`grid gap-12 ${layout === 'list' ? 'grid-cols-1' : isMobile ? 'grid-cols-1' : `grid-cols-1 ${colsClass}`}`}>
                 {paginatedCards.map((card) => {
                   const IconComponent = IconMap[card.icon] || Zap;
                   return (
@@ -174,6 +214,7 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
             </div>
           </section>
         );
+      }
 
       case 'blog':
         return (
@@ -452,8 +493,11 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
         <nav className={`px-6 py-3 flex items-center top-0 z-50 backdrop-blur-xl transition-all border-b ${navPositionClass} ${navStyleClass} ${
           isDark ? 'border-white/5' : 'border-slate-100'
         } ${data.navbarConfig.alignment === 'center' ? 'flex-col gap-3' : 'justify-between'}`}>
-          <div className="font-bold text-lg tracking-tight cursor-pointer" style={{ color: isGlass || isDark ? 'white' : data.primaryColor }}>
-            {data.siteName}
+          <div className="flex items-center gap-3">
+            {data.logoUrl && <img src={data.logoUrl} alt="Logo" className="h-6 object-contain" />}
+            <div className="font-bold text-lg tracking-tight cursor-pointer" style={{ color: isGlass || isDark ? 'white' : data.primaryColor }}>
+              {data.siteName}
+            </div>
           </div>
           
           {/* Desktop Nav */}

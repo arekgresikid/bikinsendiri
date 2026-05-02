@@ -14,6 +14,7 @@ export default function Home() {
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [showTemplates, setShowTemplates] = useState(false);
   const [zoom, setZoom] = useState(100);
+  const [saveStatus, setSaveStatus] = useState<'' | 'saving' | 'saved'>('');
 
   // Undo/Redo
   const [history, setHistory] = useState<SiteData[]>([]);
@@ -29,7 +30,13 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('bikinsendiri_data', JSON.stringify(siteData));
+    setSaveStatus('saving');
+    const timer = setTimeout(() => {
+      localStorage.setItem('bikinsendiri_data', JSON.stringify(siteData));
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus(''), 2000);
+    }, 500);
+    return () => clearTimeout(timer);
   }, [siteData]);
 
   const handleDataChange = useCallback((newData: Partial<SiteData>) => {
@@ -143,6 +150,11 @@ export default function Home() {
             <button onClick={undo} disabled={history.length === 0} title="Undo (Ctrl+Z)" className="p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 disabled:opacity-30 transition-all"><Undo2 className="w-3.5 h-3.5" /></button>
             <button onClick={redo} disabled={future.length === 0} title="Redo (Ctrl+Shift+Z)" className="p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 disabled:opacity-30 transition-all"><Redo2 className="w-3.5 h-3.5" /></button>
           </div>
+          {saveStatus && (
+            <div className="ml-2 text-[10px] font-bold text-slate-400 flex items-center gap-1 transition-opacity duration-300">
+              {saveStatus === 'saved' ? <span className="text-green-500">✓ Saved</span> : <span>Saving...</span>}
+            </div>
+          )}
         </div>
 
         {/* Center: Device Switcher + Zoom */}

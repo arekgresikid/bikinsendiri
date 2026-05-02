@@ -146,6 +146,97 @@ export function generateStaticHtml(data: SiteData) {
           </div>
         </section>`;
 
+      case 'stats':
+        return `
+        <section class="px-8 py-24 ${isDark ? 'bg-slate-900' : 'bg-white'}">
+          <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+            ${data.stats.map(s => `
+              <div class="text-center p-8 rounded-2xl border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-100'}">
+                <div class="text-4xl font-black mb-2" style="color: ${primaryColor}">${s.value}</div>
+                <div class="text-sm font-bold uppercase tracking-wider ${isDark ? 'text-white/50' : 'text-slate-400'}">${s.label}</div>
+              </div>
+            `).join('')}
+          </div>
+        </section>`;
+
+      case 'contact':
+        return `
+        <section class="px-8 py-24 ${isDark ? 'bg-slate-800' : 'bg-slate-50'}">
+          <div class="max-w-2xl mx-auto">
+            <h2 class="text-4xl font-black text-center mb-10 ${isDark ? 'text-white' : 'text-slate-900'}">Hubungi Kami</h2>
+            <form class="p-8 rounded-3xl border ${isDark ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-100'} space-y-6">
+              ${data.contactForm.fields.map(f => `
+                <div>
+                  <label class="block text-sm font-bold mb-2 ${isDark ? 'text-white/70' : 'text-slate-600'}">${f}</label>
+                  ${f.toLowerCase() === 'pesan' || f.toLowerCase() === 'message' ? 
+                    `<textarea class="w-full p-4 rounded-xl border ${isDark ? 'bg-slate-800 border-slate-600' : 'bg-slate-50 border-slate-200'}" rows="4"></textarea>` :
+                    `<input type="text" class="w-full p-4 rounded-xl border ${isDark ? 'bg-slate-800 border-slate-600' : 'bg-slate-50 border-slate-200'}">`
+                  }
+                </div>
+              `).join('')}
+              <button type="button" class="w-full py-4 rounded-xl font-bold text-white transition-opacity hover:opacity-90" style="background-color: ${primaryColor}">
+                ${data.contactForm.submitText}
+              </button>
+            </form>
+          </div>
+        </section>`;
+
+      case 'partners':
+        return `
+        <section class="px-8 py-24 ${isDark ? 'bg-slate-900' : 'bg-white'}">
+          <div class="max-w-6xl mx-auto space-y-12">
+            <p class="text-center text-sm font-bold uppercase tracking-widest ${isDark ? 'text-white/40' : 'text-slate-400'}">Dipercaya oleh</p>
+            <div class="flex flex-wrap justify-center gap-12">
+              ${data.partners.map(p => `
+                <div class="opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                  ${p.logoUrl ? `<img src="${p.logoUrl}" alt="${p.name}" class="h-10 object-contain">` : `<span class="text-2xl font-black">${p.name}</span>`}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </section>`;
+
+      case 'video':
+        if (!data.videoUrl) return '';
+        return `
+        <section class="px-8 py-24 ${isDark ? 'bg-slate-900' : 'bg-slate-50'}">
+          <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-black text-center mb-12 ${isDark ? 'text-white' : 'text-slate-900'}">Video</h2>
+            <div class="aspect-video rounded-3xl overflow-hidden shadow-2xl">
+              <iframe src="${data.videoUrl.replace('watch?v=', 'embed/')}" class="w-full h-full border-0" allowfullscreen></iframe>
+            </div>
+          </div>
+        </section>`;
+
+      case 'countdown':
+        if (!data.countdownDate) return '';
+        return `
+        <section class="px-8 py-24 text-white text-center" style="background-color: ${primaryColor}">
+          <div class="max-w-4xl mx-auto space-y-8">
+            <h2 class="text-5xl font-black">Penawaran Terbatas!</h2>
+            <div class="flex justify-center gap-6">
+              ${['Hari', 'Jam', 'Menit', 'Detik'].map((label, i) => `
+                <div class="bg-white/20 backdrop-blur rounded-2xl p-6 w-24">
+                  <div class="text-4xl font-black mb-2">${[12, 8, 45, 30][i]}</div>
+                  <div class="text-xs font-bold uppercase opacity-80">${label}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </section>`;
+
+      case 'newsletter':
+        return `
+        <section class="px-8 py-32 text-center text-white" style="background-color: ${isDark ? '#2563eb' : '#0f172a'}">
+          <div class="max-w-3xl mx-auto space-y-12">
+            <h2 class="text-5xl font-black tracking-tight">Berlangganan Newsletter</h2>
+            <div class="flex flex-col sm:flex-row gap-4 p-4 bg-white/10 rounded-[32px] backdrop-blur border border-white/20">
+              <input type="email" placeholder="Email Anda..." class="flex-1 bg-transparent px-6 text-white placeholder-white/50 outline-none">
+              <button class="px-10 py-4 bg-white text-slate-900 rounded-full font-black uppercase text-sm">Join</button>
+            </div>
+          </div>
+        </section>`;
+
       default:
         return '';
     }
@@ -166,20 +257,38 @@ export function generateStaticHtml(data: SiteData) {
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@400;700;900&family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" href="${data.faviconUrl || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>'}" />
     <style>
         body { font-family: '${font}', sans-serif; }
         .pattern-dots { background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; }
         .pattern-grid { background-image: linear-gradient(#cbd5e1 1px, transparent 1px), linear-gradient(90deg, #cbd5e1 1px, transparent 1px); background-size: 20px 20px; }
+        ${data.customCss || ''}
     </style>
 </head>
 <body class="${bgClass} ${data.backgroundPattern !== 'none' ? `pattern-${data.backgroundPattern}` : ''}">
     
-    <nav class="px-10 py-6 flex justify-between items-center sticky top-0 z-40 backdrop-blur-2xl border-b ${borderClass} ${navBg}">
-        <div class="font-black text-2xl tracking-tighter" style="color: ${primaryColor}">${data.siteName}</div>
+    ${data.announcement.enabled ? `
+    <div class="text-center py-3 px-4 text-sm font-bold text-white" style="background-color: ${data.announcement.bgColor}">
+      ${data.announcement.link ? `<a href="${data.announcement.link}" class="hover:underline">${data.announcement.text}</a>` : data.announcement.text}
+    </div>` : ''}
+
+    <nav class="px-10 py-6 flex justify-between items-center z-40 backdrop-blur-2xl border-b ${borderClass} ${navBg} ${data.navbarConfig.position === 'fixed' ? 'fixed w-full' : data.navbarConfig.position === 'sticky' ? 'sticky top-0' : 'relative'}">
+        <div class="flex items-center gap-3">
+          ${data.logoUrl ? `<img src="${data.logoUrl}" alt="Logo" class="h-8">` : ''}
+          <div class="font-black text-2xl tracking-tighter" style="color: ${primaryColor}">${data.siteName}</div>
+        </div>
         <div class="hidden md:flex gap-10 text-xs font-black uppercase tracking-widest opacity-60">
-            ${data.navLinks.map(link => `<span>${link.label}</span>`).join('')}
+            ${data.navLinks.map(link => `<a href="${link.url}" class="hover:opacity-100">${link.label}</a>`).join('')}
         </div>
     </nav>
+
+    ${data.breadcrumb.enabled ? `
+    <div class="px-10 py-4 text-sm text-slate-500 font-medium">
+      ${data.breadcrumb.items.map((item, i) => `
+        ${i > 0 ? '<span class="mx-2">/</span>' : ''}
+        <a href="${item.url}" class="hover:text-blue-600">${item.label}</a>
+      `).join('')}
+    </div>` : ''}
 
     ${sectionsHtml}
 

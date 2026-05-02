@@ -17,6 +17,8 @@ export interface SiteData {
   showWhatsapp: boolean;
   seoTitle: string;
   seoDescription: string;
+  logoUrl?: string;
+  faviconUrl?: string;
   navLinks: { label: string; url: string }[];
   backgroundPattern: 'none' | 'dots' | 'grid' | 'mesh';
   cards: { id: string; title: string; description: string; category: string; icon: string }[];
@@ -161,8 +163,9 @@ export const defaultSiteData: SiteData = {
   templateId: "modern",
   whatsappNumber: "628123456789",
   showWhatsapp: true,
-  seoTitle: "Toko Saya - Solusi Terbaik",
-  seoDescription: "Deskripsi SEO untuk toko saya yang luar biasa.",
+  seoTitle: 'Bikin Sendiri - No Code Web Builder',
+  seoDescription: 'Buat landing page premium dalam hitungan menit tanpa koding.',
+  faviconUrl: '',
   navLinks: [
     { label: "Beranda", url: "#" },
     { label: "Layanan", url: "#layanan" },

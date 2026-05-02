@@ -167,9 +167,11 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
             <div className="space-y-1.5">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Font</label>
               <select value={data.fontFamily} onChange={e => onChange({ fontFamily: e.target.value as any })} className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-bold outline-none focus:border-blue-400">
-                <option value="Inter">Inter</option>
-                <option value="Outfit">Outfit</option>
-                <option value="Roboto">Roboto</option>
+                <option value="Inter">Inter — Modern & Clean</option>
+                <option value="Outfit">Outfit — Geometric</option>
+                <option value="Roboto">Roboto — Industrial</option>
+                <option value="Poppins">Poppins — Friendly</option>
+                <option value="DM Sans">DM Sans — Elegant</option>
               </select>
             </div>
             <div className="space-y-1.5">
@@ -303,7 +305,95 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
           </div>
         </CollapsibleSection>
 
-        {/* === STYLE GLOBAL === */}
+        {/* === STATS === */}
+        <CollapsibleSection title="Statistik / Angka" icon={<Hash className="w-4 h-4" />} isOpen={expandedSection === "stats"} onToggle={() => toggleSection("stats")}>
+          <div className="space-y-3">
+            {data.stats.map((stat, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input value={stat.value} onChange={e => { const n = [...data.stats]; n[i] = { ...n[i], value: e.target.value }; onChange({ stats: n }); }} className="w-24 p-2 bg-slate-50 rounded-lg text-xs font-bold border border-slate-100 outline-none focus:border-blue-400" placeholder="500+" />
+                <input value={stat.label} onChange={e => { const n = [...data.stats]; n[i] = { ...n[i], label: e.target.value }; onChange({ stats: n }); }} className="flex-1 p-2 bg-slate-50 rounded-lg text-xs border border-slate-100 outline-none focus:border-blue-400" placeholder="Label" />
+                <button onClick={() => onChange({ stats: data.stats.filter((_, j) => j !== i) })} className="text-red-400 hover:text-red-600 p-1"><Trash2 className="w-3.5 h-3.5" /></button>
+              </div>
+            ))}
+            <button onClick={() => onChange({ stats: [...data.stats, { label: "Label Baru", value: "0" }] })} className="w-full py-2 rounded-xl border-2 border-dashed border-slate-200 text-xs font-bold text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-all flex items-center justify-center gap-2">
+              <Plus className="w-3.5 h-3.5" /> Tambah Statistik
+            </button>
+          </div>
+        </CollapsibleSection>
+
+        {/* === CONTACT FORM === */}
+        <CollapsibleSection title="Form Kontak" icon={<Mail className="w-4 h-4" />} isOpen={expandedSection === "contact"} onToggle={() => toggleSection("contact")}>
+          <div className="space-y-4">
+            <Field label="Teks Tombol Submit" value={data.contactForm.submitText} onChange={v => onChange({ contactForm: { ...data.contactForm, submitText: v } })} />
+            <Field label="Email Tujuan" value={data.contactForm.email} onChange={v => onChange({ contactForm: { ...data.contactForm, email: v } })} placeholder="email@anda.com" />
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Field Form (1 per baris)</label>
+              <textarea value={data.contactForm.fields.join('\n')} onChange={e => onChange({ contactForm: { ...data.contactForm, fields: e.target.value.split('\n').filter(Boolean) } })} className="w-full p-2.5 bg-slate-50 rounded-xl text-xs border border-slate-100 outline-none focus:border-blue-400 resize-none" rows={4} />
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* === PARTNERS === */}
+        <CollapsibleSection title="Partner / Logo" icon={<Star className="w-4 h-4" />} isOpen={expandedSection === "partners"} onToggle={() => toggleSection("partners")}>
+          <div className="space-y-3">
+            {data.partners.map((partner, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input value={partner.name} onChange={e => { const n = [...data.partners]; n[i] = { ...n[i], name: e.target.value }; onChange({ partners: n }); }} className="w-24 p-2 bg-slate-50 rounded-lg text-xs font-bold border border-slate-100 outline-none focus:border-blue-400" placeholder="Nama" />
+                <input value={partner.logoUrl} onChange={e => { const n = [...data.partners]; n[i] = { ...n[i], logoUrl: e.target.value }; onChange({ partners: n }); }} className="flex-1 p-2 bg-slate-50 rounded-lg text-xs border border-slate-100 outline-none focus:border-blue-400" placeholder="URL Logo" />
+                <button onClick={() => onChange({ partners: data.partners.filter((_, j) => j !== i) })} className="text-red-400 hover:text-red-600 p-1"><Trash2 className="w-3.5 h-3.5" /></button>
+              </div>
+            ))}
+            <button onClick={() => onChange({ partners: [...data.partners, { name: "Brand", logoUrl: "" }] })} className="w-full py-2 rounded-xl border-2 border-dashed border-slate-200 text-xs font-bold text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-all flex items-center justify-center gap-2">
+              <Plus className="w-3.5 h-3.5" /> Tambah Partner
+            </button>
+          </div>
+        </CollapsibleSection>
+
+        {/* === BLOG POSTS === */}
+        <CollapsibleSection title="Blog Posts" icon={<BookOpen className="w-4 h-4" />} isOpen={expandedSection === "blog"} onToggle={() => toggleSection("blog")}>
+          <div className="space-y-3">
+            {data.blogPosts.map((post, i) => (
+              <div key={post.id} className="p-3 bg-slate-50 rounded-xl space-y-2 border border-slate-100">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Post #{i + 1}</span>
+                  <button onClick={() => onChange({ blogPosts: data.blogPosts.filter((_, j) => j !== i) })} className="text-red-400 hover:text-red-600 p-1"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+                <input value={post.title} onChange={e => { const n = [...data.blogPosts]; n[i] = { ...n[i], title: e.target.value }; onChange({ blogPosts: n }); }} className="w-full p-2 bg-white rounded-lg text-xs font-bold border border-slate-100 outline-none focus:border-blue-400" placeholder="Judul" />
+                <input value={post.excerpt} onChange={e => { const n = [...data.blogPosts]; n[i] = { ...n[i], excerpt: e.target.value }; onChange({ blogPosts: n }); }} className="w-full p-2 bg-white rounded-lg text-xs border border-slate-100 outline-none focus:border-blue-400" placeholder="Ringkasan" />
+                <input value={post.image} onChange={e => { const n = [...data.blogPosts]; n[i] = { ...n[i], image: e.target.value }; onChange({ blogPosts: n }); }} className="w-full p-2 bg-white rounded-lg text-xs border border-slate-100 outline-none focus:border-blue-400" placeholder="URL Gambar" />
+              </div>
+            ))}
+            <button onClick={() => onChange({ blogPosts: [...data.blogPosts, { id: Date.now().toString(), title: "Post Baru", excerpt: "Deskripsi singkat.", date: new Date().toLocaleDateString('id-ID'), image: "" }] })} className="w-full py-2 rounded-xl border-2 border-dashed border-slate-200 text-xs font-bold text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-all flex items-center justify-center gap-2">
+              <Plus className="w-3.5 h-3.5" /> Tambah Post
+            </button>
+          </div>
+        </CollapsibleSection>
+
+        {/* === NAV LINKS === */}
+        <CollapsibleSection title="Navigasi" icon={<Layers className="w-4 h-4" />} isOpen={expandedSection === "nav"} onToggle={() => toggleSection("nav")}>
+          <div className="space-y-3">
+            {data.navLinks.map((link, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input value={link.label} onChange={e => { const n = [...data.navLinks]; n[i] = { ...n[i], label: e.target.value }; onChange({ navLinks: n }); }} className="flex-1 p-2 bg-slate-50 rounded-lg text-xs font-bold border border-slate-100 outline-none focus:border-blue-400" placeholder="Label" />
+                <input value={link.url} onChange={e => { const n = [...data.navLinks]; n[i] = { ...n[i], url: e.target.value }; onChange({ navLinks: n }); }} className="flex-1 p-2 bg-slate-50 rounded-lg text-xs border border-slate-100 outline-none focus:border-blue-400" placeholder="URL" />
+                <button onClick={() => onChange({ navLinks: data.navLinks.filter((_, j) => j !== i) })} className="text-red-400 hover:text-red-600 p-1"><Trash2 className="w-3.5 h-3.5" /></button>
+              </div>
+            ))}
+            <button onClick={() => onChange({ navLinks: [...data.navLinks, { label: "Link Baru", url: "#" }] })} className="w-full py-2 rounded-xl border-2 border-dashed border-slate-200 text-xs font-bold text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-all flex items-center justify-center gap-2">
+              <Plus className="w-3.5 h-3.5" /> Tambah Link
+            </button>
+          </div>
+        </CollapsibleSection>
+
+        {/* === VIDEO === */}
+        <CollapsibleSection title="Video Embed" icon={<Monitor className="w-4 h-4" />} isOpen={expandedSection === "video"} onToggle={() => toggleSection("video")}>
+          <div className="space-y-4">
+            <Field label="URL YouTube" value={data.videoUrl} onChange={v => onChange({ videoUrl: v })} placeholder="https://youtube.com/watch?v=..." />
+            <p className="text-[10px] text-slate-400">Aktifkan section Video di Urutan Section untuk menampilkan</p>
+          </div>
+        </CollapsibleSection>
+
+
         <CollapsibleSection title="Style Global" icon={<Sliders className="w-4 h-4" />} isOpen={expandedSection === "style"} onToggle={() => toggleSection("style")}>
           <div className="space-y-4">
             <div className="space-y-1.5">

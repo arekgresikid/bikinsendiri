@@ -295,6 +295,98 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
           </section>
         );
 
+
+      case 'stats':
+        return (
+          <section key="stats" className={`${commonClass} ${isDark ? 'bg-slate-900' : 'bg-white'}`} style={sectionStyle}>
+            <div style={containerStyle} className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {data.stats.map((stat, i) => (
+                <div key={i} className={`text-center p-8 rounded-2xl border transition-all hover:scale-105 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
+                  <div className="text-3xl font-black mb-2" style={{ color: data.primaryColor }}>{stat.value}</div>
+                  <div className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-white/50' : 'text-slate-400'}`}>{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+
+      case 'contact':
+        return (
+          <section key="contact" className={`${commonClass} ${isDark ? 'bg-slate-800/50' : 'bg-slate-50'}`} style={sectionStyle}>
+            <div style={containerStyle} className="max-w-2xl mx-auto space-y-10">
+              <div className="text-center space-y-3">
+                <h2 className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-950'}`}>Hubungi <span style={{ color: data.primaryColor }}>Kami</span></h2>
+                <p className={`text-sm ${isDark ? 'text-white/50' : 'text-slate-500'}`}>Kirim pesan dan kami akan segera merespons</p>
+              </div>
+              <div className={`p-8 rounded-2xl border space-y-4 ${isDark ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-100'}`} style={{ borderRadius: currentRadius }}>
+                {data.contactForm.fields.map((field, i) => (
+                  <div key={i}>
+                    <label className={`text-xs font-bold mb-1.5 block ${isDark ? 'text-white/60' : 'text-slate-500'}`}>{field}</label>
+                    {field.toLowerCase() === 'pesan' || field.toLowerCase() === 'message' ? (
+                      <div className={`w-full h-24 rounded-xl border ${isDark ? 'bg-slate-800 border-slate-600' : 'bg-slate-50 border-slate-200'}`} />
+                    ) : (
+                      <div className={`w-full h-10 rounded-xl border ${isDark ? 'bg-slate-800 border-slate-600' : 'bg-slate-50 border-slate-200'}`} />
+                    )}
+                  </div>
+                ))}
+                <button className="w-full py-3 rounded-xl font-bold text-sm text-white transition-all hover:opacity-90" style={{ backgroundColor: data.primaryColor, borderRadius: currentRadius }}>
+                  {data.contactForm.submitText}
+                </button>
+              </div>
+            </div>
+          </section>
+        );
+
+      case 'partners':
+        return (
+          <section key="partners" className={`${commonClass} ${isDark ? 'bg-slate-900' : 'bg-white'}`} style={sectionStyle}>
+            <div style={containerStyle} className="space-y-10">
+              <p className={`text-center text-xs font-bold uppercase tracking-widest ${isDark ? 'text-white/30' : 'text-slate-400'}`}>Dipercaya oleh brand terkemuka</p>
+              <div className="flex flex-wrap items-center justify-center gap-10">
+                {data.partners.map((partner, i) => (
+                  <div key={i} className="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                    {partner.logoUrl ? (
+                      <img src={partner.logoUrl} alt={partner.name} className="h-8 object-contain" />
+                    ) : (
+                      <span className="text-lg font-black">{partner.name}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+
+      case 'video':
+        return data.videoUrl ? (
+          <section key="video" className={`${commonClass} ${isDark ? 'bg-slate-900' : 'bg-slate-50'}`} style={sectionStyle}>
+            <div style={containerStyle} className="max-w-4xl mx-auto space-y-8">
+              <h2 className={`text-4xl font-black tracking-tight text-center ${isDark ? 'text-white' : 'text-slate-950'}`}>Lihat <span style={{ color: data.primaryColor }}>Demo</span></h2>
+              <div className="aspect-video rounded-2xl overflow-hidden shadow-xl" style={{ borderRadius: currentRadius }}>
+                <iframe src={data.videoUrl.replace('watch?v=', 'embed/')} className="w-full h-full" allowFullScreen title="Video" />
+              </div>
+            </div>
+          </section>
+        ) : null;
+
+      case 'countdown':
+        return data.countdownDate ? (
+          <section key="countdown" className={`${commonClass} text-white text-center`} style={{ ...sectionStyle, backgroundColor: data.primaryColor }}>
+            <div style={containerStyle} className="space-y-6">
+              <h2 className="text-4xl font-black">Penawaran Terbatas!</h2>
+              <p className="opacity-80 text-sm">Jangan lewatkan kesempatan ini</p>
+              <div className="flex justify-center gap-4">
+                {['Hari', 'Jam', 'Menit', 'Detik'].map((label, i) => (
+                  <div key={i} className="bg-white/20 backdrop-blur rounded-2xl p-4 w-20">
+                    <div className="text-3xl font-black">{[12, 8, 45, 30][i]}</div>
+                    <div className="text-[10px] font-bold uppercase opacity-70">{label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null;
+
       default:
         return null;
     }

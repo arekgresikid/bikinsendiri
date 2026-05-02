@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, Roboto } from "next/font/google";
+import { Inter, Outfit, Roboto, Poppins, DM_Sans } from "next/font/google";
 
 import "./globals.css";
 
@@ -19,6 +19,17 @@ const roboto = Roboto({
   weight: ["400", "700"],
 });
 
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+});
+
 
 export const metadata: Metadata = {
   title: "Bikin Sendiri - No Code Web Builder",
@@ -33,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body
-        className={`${inter.variable} ${outfit.variable} ${roboto.variable} font-sans antialiased text-slate-900`}
+        className={`${inter.variable} ${outfit.variable} ${roboto.variable} ${poppins.variable} ${dmSans.variable} font-sans antialiased text-slate-900`}
 
       >
         {children}

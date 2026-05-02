@@ -393,42 +393,78 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
           </div>
         </CollapsibleSection>
 
+        {/* === ANNOUNCEMENT BAR === */}
+        <CollapsibleSection title="Banner Promo" icon={<Sparkles className="w-4 h-4" />} isOpen={expandedSection === "announce"} onToggle={() => toggleSection("announce")}>
+          <div className="space-y-4">
+            <ToggleRow label="Aktifkan Banner" value={data.announcement.enabled} onChange={v => onChange({ announcement: { ...data.announcement, enabled: v } })} />
+            {data.announcement.enabled && (
+              <>
+                <Field label="Teks Banner" value={data.announcement.text} onChange={v => onChange({ announcement: { ...data.announcement, text: v } })} />
+                <Field label="URL Link" value={data.announcement.link} onChange={v => onChange({ announcement: { ...data.announcement, link: v } })} placeholder="#" />
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Warna Background</label>
+                  <div className="flex items-center gap-2">
+                    <input type="color" value={data.announcement.bgColor} onChange={e => onChange({ announcement: { ...data.announcement, bgColor: e.target.value } })} className="w-8 h-8 rounded-lg cursor-pointer border-0" />
+                    <input type="text" value={data.announcement.bgColor} onChange={e => onChange({ announcement: { ...data.announcement, bgColor: e.target.value } })} className="flex-1 p-2 bg-slate-50 rounded-lg text-xs font-mono border border-slate-100 outline-none focus:border-blue-400" />
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </CollapsibleSection>
 
+        {/* === BREADCRUMB === */}
+        <CollapsibleSection title="Breadcrumb" icon={<Layers className="w-4 h-4" />} isOpen={expandedSection === "breadcrumb"} onToggle={() => toggleSection("breadcrumb")}>
+          <div className="space-y-4">
+            <ToggleRow label="Tampilkan Breadcrumb" value={data.breadcrumb.enabled} onChange={v => onChange({ breadcrumb: { ...data.breadcrumb, enabled: v } })} />
+            {data.breadcrumb.enabled && (
+              <div className="space-y-2">
+                {data.breadcrumb.items.map((item, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <input value={item.label} onChange={e => { const n = [...data.breadcrumb.items]; n[i] = { ...n[i], label: e.target.value }; onChange({ breadcrumb: { ...data.breadcrumb, items: n } }); }} className="flex-1 p-2 bg-slate-50 rounded-lg text-xs font-bold border border-slate-100 outline-none focus:border-blue-400" />
+                    <button onClick={() => onChange({ breadcrumb: { ...data.breadcrumb, items: data.breadcrumb.items.filter((_, j) => j !== i) } })} className="text-red-400 hover:text-red-600 p-1"><Trash2 className="w-3.5 h-3.5" /></button>
+                  </div>
+                ))}
+                <button onClick={() => onChange({ breadcrumb: { ...data.breadcrumb, items: [...data.breadcrumb.items, { label: "Halaman", url: "#" }] } })} className="w-full py-2 rounded-xl border-2 border-dashed border-slate-200 text-xs font-bold text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-all flex items-center justify-center gap-2">
+                  <Plus className="w-3.5 h-3.5" /> Tambah Item
+                </button>
+              </div>
+            )}
+          </div>
+        </CollapsibleSection>
+
+        {/* === NAVBAR CONFIG === */}
+        <CollapsibleSection title="Navbar Config" icon={<Monitor className="w-4 h-4" />} isOpen={expandedSection === "navbar"} onToggle={() => toggleSection("navbar")}>
+          <div className="space-y-4">
+            <OptionGrid label="Posisi" options={['fixed', 'sticky', 'static']} value={data.navbarConfig.position} onChange={v => onChange({ navbarConfig: { ...data.navbarConfig, position: v as any } })} />
+            <OptionGrid label="Gaya" options={['solid', 'transparent']} value={data.navbarConfig.style} onChange={v => onChange({ navbarConfig: { ...data.navbarConfig, style: v as any } })} />
+            <OptionGrid label="Alignment" options={['between', 'center']} value={data.navbarConfig.alignment} onChange={v => onChange({ navbarConfig: { ...data.navbarConfig, alignment: v as any } })} />
+          </div>
+        </CollapsibleSection>
+
+        {/* === STYLE GLOBAL === */}
         <CollapsibleSection title="Style Global" icon={<Sliders className="w-4 h-4" />} isOpen={expandedSection === "style"} onToggle={() => toggleSection("style")}>
           <div className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Gaya Tombol</label>
-              <div className="grid grid-cols-4 gap-1.5">
-                {(['solid', 'outline', 'soft', 'ghost'] as const).map(style => (
-                  <button key={style} onClick={() => onChange({ globalStyle: { ...data.globalStyle, buttonStyle: style } })}
-                    className={`py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${data.globalStyle.buttonStyle === style ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-400'}`}>
-                    {style}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Corner Radius</label>
-              <div className="grid grid-cols-4 gap-1.5">
-                {(['none', 'md', 'xl', 'full'] as const).map(r => (
-                  <button key={r} onClick={() => onChange({ globalStyle: { ...data.globalStyle, borderRadius: r } })}
-                    className={`py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${data.globalStyle.borderRadius === r ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-400'}`}>
-                    {r}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Layout Padding</label>
-              <div className="grid grid-cols-3 gap-1.5">
-                {(['compact', 'normal', 'relaxed'] as const).map(scale => (
-                  <button key={scale} onClick={() => onChange({ globalStyle: { ...data.globalStyle, layoutScale: scale } })}
-                    className={`py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${data.globalStyle.layoutScale === scale ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-400'}`}>
-                    {scale}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <OptionGrid label="Gaya Tombol" options={['solid', 'outline', 'soft', 'ghost']} value={data.globalStyle.buttonStyle} onChange={v => onChange({ globalStyle: { ...data.globalStyle, buttonStyle: v as any } })} />
+            <OptionGrid label="Ukuran Tombol" options={['sm', 'md', 'lg', 'xl']} value={data.globalStyle.buttonSize} onChange={v => onChange({ globalStyle: { ...data.globalStyle, buttonSize: v as any } })} />
+            <OptionGrid label="Corner Radius" options={['none', 'md', 'xl', 'full']} value={data.globalStyle.borderRadius} onChange={v => onChange({ globalStyle: { ...data.globalStyle, borderRadius: v as any } })} />
+            <OptionGrid label="Layout Padding" options={['compact', 'normal', 'relaxed']} value={data.globalStyle.layoutScale} onChange={v => onChange({ globalStyle: { ...data.globalStyle, layoutScale: v as any } })} />
+            <OptionGrid label="Animasi Scroll" options={['none', 'fade-up', 'slide-left', 'zoom-in']} value={data.globalStyle.scrollAnimation} onChange={v => onChange({ globalStyle: { ...data.globalStyle, scrollAnimation: v as any } })} />
+          </div>
+        </CollapsibleSection>
+
+        {/* === CUSTOM CSS === */}
+        <CollapsibleSection title="Custom CSS" icon={<Type className="w-4 h-4" />} isOpen={expandedSection === "css"} onToggle={() => toggleSection("css")}>
+          <div className="space-y-2">
+            <p className="text-[10px] text-slate-400">Tambahkan CSS kustom untuk override styling</p>
+            <textarea
+              value={data.customCss}
+              onChange={e => onChange({ customCss: e.target.value })}
+              className="w-full p-3 bg-slate-900 text-green-400 rounded-xl text-xs font-mono border border-slate-700 outline-none focus:border-blue-400 resize-none"
+              rows={8}
+              placeholder=".my-class {&#10;  color: red;&#10;}"
+              spellCheck={false}
+            />
           </div>
         </CollapsibleSection>
 
@@ -457,10 +493,10 @@ function Field({ label, value, onChange, placeholder, multiline }: { label: stri
 function CollapsibleSection({ title, icon, children, isOpen, onToggle }: { title: string; icon: any; children: React.ReactNode; isOpen: boolean; onToggle: () => void }) {
   return (
     <div className="border-b border-slate-100">
-      <button onClick={onToggle} className="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50/80 transition-colors">
+      <button onClick={onToggle} className="w-full px-5 py-3.5 flex items-center justify-between hover:bg-slate-50/80 transition-colors">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">{icon}</div>
-          <span className="font-bold text-sm text-slate-800">{title}</span>
+          <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">{icon}</div>
+          <span className="font-bold text-[13px] text-slate-800">{title}</span>
         </div>
         <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -468,3 +504,31 @@ function CollapsibleSection({ title, icon, children, isOpen, onToggle }: { title
     </div>
   );
 }
+
+function ToggleRow({ label, value, onChange }: { label: string; value: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+      <span className="text-xs font-bold text-slate-600">{label}</span>
+      <button onClick={() => onChange(!value)} className={`w-10 h-6 rounded-full transition-all relative ${value ? 'bg-blue-600' : 'bg-slate-300'}`}>
+        <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all shadow ${value ? 'left-5' : 'left-1'}`} />
+      </button>
+    </div>
+  );
+}
+
+function OptionGrid({ label, options, value, onChange }: { label: string; options: string[]; value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="space-y-1.5">
+      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{label}</label>
+      <div className={`grid gap-1.5 ${options.length <= 3 ? 'grid-cols-3' : 'grid-cols-4'}`}>
+        {options.map(opt => (
+          <button key={opt} onClick={() => onChange(opt)}
+            className={`py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${value === opt ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'}`}>
+            {opt}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+

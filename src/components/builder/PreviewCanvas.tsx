@@ -4,7 +4,7 @@ import { SiteData } from "@/types/site";
 import { 
   MessageSquare, Zap, DollarSign, Clock, Instagram, Facebook, Youtube, 
   ChevronDown, ArrowRight, Calendar, Check, Quote, Star as StarIcon,
-  Twitter, Linkedin, Send, Mail, Sparkles
+  Twitter, Linkedin, Send, Mail, Sparkles, Menu, X, ChevronRight
 } from "lucide-react";
 
 interface PreviewCanvasProps {
@@ -43,16 +43,25 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
     return () => clearTimeout(timer);
   }, [data]);
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   // Elite Scaling Logic
   const radiusMap = { none: '0px', md: '16px', xl: '40px', full: '9999px' };
   const shadowMap = { none: 'none', sm: '0 4px 6px -1px rgba(0,0,0,0.1)', xl: '0 25px 50px -12px rgba(0,0,0,0.15)', '2xl': '0 40px 80px -20px rgba(0,0,0,0.35)' };
   const paddingMap = { compact: '64px', normal: '128px', relaxed: '208px' };
   const fontScaleMap = { sm: 'text-[0.9rem]', base: 'text-[1rem]', lg: 'text-[1.15rem]' };
+  const btnSizeMap = { sm: 'px-4 py-2 text-[10px]', md: 'px-6 py-3 text-[11px]', lg: 'px-8 py-4 text-xs', xl: 'px-10 py-5 text-sm' };
 
   const currentRadius = radiusMap[data.globalStyle.borderRadius];
   const currentShadow = shadowMap[data.globalStyle.shadow];
   const globalPaddingVal = paddingMap[data.globalStyle.layoutScale];
   const currentFontScale = fontScaleMap[data.globalStyle.fontSize];
+  const btnSize = btnSizeMap[data.globalStyle.buttonSize];
+
+  const scrollAnimClass = data.globalStyle.scrollAnimation === 'none' ? '' :
+    data.globalStyle.scrollAnimation === 'fade-up' ? 'animate-[fadeUp_0.6s_ease-out]' :
+    data.globalStyle.scrollAnimation === 'slide-left' ? 'animate-[slideLeft_0.6s_ease-out]' :
+    'animate-[zoomIn_0.5s_ease-out]';
 
   const getButtonStyle = () => {
     const style = data.globalStyle.buttonStyle;
@@ -418,29 +427,58 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
           isGlass ? 'bg-transparent text-white' : 
           isDark ? 'bg-slate-950 text-slate-100' : 'bg-white text-slate-900'
         } ${data.backgroundPattern !== 'none' ? `pattern-${data.backgroundPattern}` : ''}`} 
-        style={{ fontFamily: `var(--font-${data.fontFamily.toLowerCase()})` }}
+        style={{ fontFamily: `var(--font-${data.fontFamily.toLowerCase().replace(' ', '-')})` }}
       >
+        {/* Custom CSS */}
+        {data.customCss && <style dangerouslySetInnerHTML={{ __html: data.customCss }} />}
+
+        {/* Scroll Animation Keyframes */}
+        {data.globalStyle.scrollAnimation !== 'none' && (
+          <style dangerouslySetInnerHTML={{ __html: `
+            @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+            @keyframes slideLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+            @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+          `}} />
+        )}
+
+        {/* Announcement Bar */}
+        {data.announcement.enabled && (
+          <div className="text-center py-2 px-4 text-xs font-bold text-white" style={{ backgroundColor: data.announcement.bgColor }}>
+            {data.announcement.text}
+          </div>
+        )}
+
         {/* Navigation */}
-        <nav className={`px-6 py-4 flex items-center top-0 z-50 backdrop-blur-xl transition-all border-b ${navPositionClass} ${navStyleClass} ${
+        <nav className={`px-6 py-3 flex items-center top-0 z-50 backdrop-blur-xl transition-all border-b ${navPositionClass} ${navStyleClass} ${
           isDark ? 'border-white/5' : 'border-slate-100'
-        } ${data.navbarConfig.alignment === 'center' ? 'flex-col gap-4' : 'justify-between'}`}>
-          <div className="font-bold text-xl tracking-tight cursor-pointer" style={{ color: isGlass || isDark ? 'white' : data.primaryColor }}>
+        } ${data.navbarConfig.alignment === 'center' ? 'flex-col gap-3' : 'justify-between'}`}>
+          <div className="font-bold text-lg tracking-tight cursor-pointer" style={{ color: isGlass || isDark ? 'white' : data.primaryColor }}>
             {data.siteName}
           </div>
           
-          <div className={`flex gap-6 text-[11px] font-semibold ${isGlass || isDark ? 'text-white/50' : 'text-slate-500'}`}>
-            {data.navLinks.map((link, idx) => (
-              <div key={idx} className="relative group/nav cursor-pointer hover:text-slate-900 transition-colors">
-                {link.label}
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover/nav:w-full rounded-full" />
-              </div>
-            ))}
-          </div>
+          {/* Desktop Nav */}
+          {!isMobile && (
+            <div className={`flex gap-6 text-[11px] font-semibold ${isGlass || isDark ? 'text-white/50' : 'text-slate-500'}`}>
+              {data.navLinks.map((link, idx) => (
+                <div key={idx} className="relative group/nav cursor-pointer hover:text-slate-900 transition-colors">
+                  {link.label}
+                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover/nav:w-full rounded-full" />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Mobile Hamburger */}
+          {isMobile && (
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={`p-1.5 rounded-lg ${isDark ? 'text-white' : 'text-slate-600'}`}>
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          )}
           
           {!isMobile && (
-             <div className="flex gap-6 items-center">
+             <div className="flex gap-4 items-center">
                 <button 
-                  className="px-6 py-2.5 rounded-full text-[11px] font-bold transition-all"
+                  className={`${btnSize} rounded-full font-bold transition-all`}
                   style={getButtonStyle()}
                 >
                   Contact
@@ -448,6 +486,28 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
              </div>
           )}
         </nav>
+
+        {/* Mobile Menu Overlay */}
+        {isMobile && mobileMenuOpen && (
+          <div className={`absolute inset-0 z-[100] flex flex-col items-center justify-center gap-6 backdrop-blur-xl ${isDark ? 'bg-slate-950/95' : 'bg-white/95'}`}>
+            {data.navLinks.map((link, idx) => (
+              <div key={idx} className={`text-xl font-bold cursor-pointer ${isDark ? 'text-white' : 'text-slate-800'}`}>{link.label}</div>
+            ))}
+            <button className={`${btnSize} rounded-full font-bold mt-4`} style={getButtonStyle()}>Contact</button>
+          </div>
+        )}
+
+        {/* Breadcrumb */}
+        {data.breadcrumb.enabled && (
+          <div className={`px-6 py-2 flex items-center gap-1.5 text-[10px] font-medium ${isDark ? 'text-white/40' : 'text-slate-400'}`}>
+            {data.breadcrumb.items.map((item, i) => (
+              <span key={i} className="flex items-center gap-1.5">
+                {i > 0 && <ChevronRight className="w-3 h-3" />}
+                <span className={i === data.breadcrumb.items.length - 1 ? (isDark ? 'text-white' : 'text-slate-700') : ''}>{item.label}</span>
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Dynamic Sections */}
         {data.sections
@@ -457,7 +517,11 @@ export default function PreviewCanvas({ data, device }: PreviewCanvasProps) {
             const indexB = data.sections.indexOf(b);
             return indexA - indexB;
           })
-          .map(s => renderSection(s))}
+          .map(s => (
+            <div key={s.id} className={scrollAnimClass}>
+              {renderSection(s)}
+            </div>
+          ))}
 
         {/* Studio Footer */}
         <footer className={`p-12 text-center space-y-10 transition-all ${isDark ? 'bg-black' : 'bg-slate-950 text-slate-500'}`}>
